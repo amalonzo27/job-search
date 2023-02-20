@@ -1,7 +1,3 @@
-const favoriteFood = "sushi";
-
-const goodFoods = {
-  [favoriteFood]: true,
-};
-
-console.log(goodFoods);
+setInterval(() => {
+  console.log("2 sec hehe");
+}, 2000);
