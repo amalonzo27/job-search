@@ -12,7 +12,7 @@ describe("JobListings", () => {
     expect(axios.get).toHaveBeenCalledWith("http://localhost:3000/jobs");
   });
 
-  it("creates a job listing for every job", async () => {
+  it("displays maximum of 10 jobs", async () => {
     axios.get.mockResolvedValue({ data: Array(15).fill({}) });
     render(JobListings, {
       global: {
