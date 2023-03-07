@@ -2,6 +2,7 @@ import { createPinia, setActivePinia } from "pinia";
 import axios from "axios";
 
 import { useJobsStore } from "@/stores/jobs";
+import { useUserStore } from "@/stores/user";
 
 vi.mock("axios");
 
@@ -47,6 +48,77 @@ describe("actions", () => {
         const result = store.UNIQUE_ORGANIZATIONS;
 
         expect(result).toEqual(new Set(["Google", "Amazon"]));
+      });
+    });
+
+    describe("UNIQUE_JOB_TYPES", () => {
+      it("finds unique job types from list of jobs", () => {
+        const store = useJobsStore();
+        store.jobs = [
+          {
+            jobType: "Full-time",
+          },
+          {
+            jobType: "Temporary",
+          },
+          {
+            jobType: "Full-time",
+          },
+        ];
+        const result = store.UNIQUE_JOB_TYPES;
+        expect(result).toEqual(new Set(["Full-time", "Temporary"]));
+      });
+    });
+
+    describe("INCLUDE JOB BY ORGANIZATION", () => {
+      describe("when the user has not selected any organizations", () => {
+        it("it includes job", () => {
+          const userStore = useUserStore();
+          userStore.selectedOrganizations = [];
+          const store = useJobsStore();
+          const job = { organization: "Google" };
+
+          const result = store.INCLUDE_JOB_BY_ORGANIZATION(job);
+
+          expect(result).toBe(true);
+        });
+      });
+
+      it("identifies if job is associated with given organizations", () => {
+        const userStore = useUserStore();
+        userStore.selectedOrganizations = ["Google", "Microsoft"];
+        const store = useJobsStore();
+        const job = { organization: "Google" };
+
+        const result = store.INCLUDE_JOB_BY_ORGANIZATION(job);
+
+        expect(result).toBe(true);
+      });
+    });
+
+    describe("INCLUDE JOB BY JOB TYPE", () => {
+      describe("when the user has not selected any job type", () => {
+        it("it includes job", () => {
+          const userStore = useUserStore();
+          userStore.selectedJobTypes = [];
+          const store = useJobsStore();
+          const job = { jobType: "Full-time" };
+
+          const result = store.INCLUDE_JOB_BY_JOB_TYPE(job);
+
+          expect(result).toBe(true);
+        });
+      });
+
+      it("identifies if job is associated with given job types", () => {
+        const userStore = useUserStore();
+        userStore.selectedJobTypes = ["Part-time", "Full-time"];
+        const store = useJobsStore();
+        const job = { jobType: "Full-time" };
+
+        const result = store.INCLUDE_JOB_BY_JOB_TYPE(job);
+
+        expect(result).toBe(true);
       });
     });
   });
