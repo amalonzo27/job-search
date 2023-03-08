@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { render, screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { RouterLinkStub } from "@vue/test-utils";
@@ -9,8 +10,10 @@ vi.mock("vue-router");
 import MainNav from "@/components/Navigation/MainNav.vue";
 import { useUserStore } from "@/stores/user";
 
+const useRouteMock = useRoute as Mock;
+
 describe("MainNav", () => {
-  useRoute.mockReturnValue({ name: "Home" });
+  useRouteMock.mockReturnValue({ name: "Home" });
   const renderMainNav = () => {
     const pinia = createTestingPinia();
 
@@ -24,6 +27,12 @@ describe("MainNav", () => {
       },
     });
   };
+
+  it("displays company name", () => {
+    renderMainNav();
+    const companyName = screen.getByText("Yondu Careers");
+    expect(companyName).toBeInTheDocument();
+  });
 
   it("displays menu items for nagivation", () => {
     renderMainNav();
