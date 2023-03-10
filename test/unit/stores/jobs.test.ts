@@ -67,7 +67,7 @@ describe("actions", () => {
       });
     });
 
-    describe("INCLUDE JOB BY ORGANIZATION", () => {
+    describe("INCLUDE_JOB_BY_ORGANIZATION", () => {
       describe("when the user has not selected any organizations", () => {
         it("it includes job", () => {
           const userStore = useUserStore();
@@ -92,24 +92,13 @@ describe("actions", () => {
         expect(result).toBe(true);
       });
     });
+  });
 
-    describe("INCLUDE JOB BY JOB TYPE", () => {
-      describe("when the user has not selected any job type", () => {
-        it("it includes job", () => {
-          const userStore = useUserStore();
-          userStore.selectedJobTypes = [];
-          const store = useJobsStore();
-          const job = createJob({ jobType: "Full-time" });
-
-          const result = store.INCLUDE_JOB_BY_JOB_TYPE(job);
-
-          expect(result).toBe(true);
-        });
-      });
-
-      it("identifies if job is associated with given job types", () => {
+  describe("INCLUDE_JOB_BY_JOB_TYPE", () => {
+    describe("when the user has not selected any job type", () => {
+      it("it includes job", () => {
         const userStore = useUserStore();
-        userStore.selectedJobTypes = ["Part-time", "Full-time"];
+        userStore.selectedJobTypes = [];
         const store = useJobsStore();
         const job = createJob({ jobType: "Full-time" });
 
@@ -117,6 +106,43 @@ describe("actions", () => {
 
         expect(result).toBe(true);
       });
+    });
+
+    it("identifies if job is associated with given job types", () => {
+      const userStore = useUserStore();
+      userStore.selectedJobTypes = ["Part-time", "Full-time"];
+      const store = useJobsStore();
+      const job = createJob({ jobType: "Full-time" });
+
+      const result = store.INCLUDE_JOB_BY_JOB_TYPE(job);
+
+      expect(result).toBe(true);
+    });
+  });
+
+  describe("INCLUDE_JOB_BY_DEGREE", () => {
+    describe("when the user has not selected any degrees", () => {
+      it("it includes job", () => {
+        const userStore = useUserStore();
+        userStore.selectedDegrees = [];
+        const store = useJobsStore();
+        const job = createJob();
+
+        const result = store.INCLUDE_JOB_BY_DEGREE(job);
+
+        expect(result).toBe(true);
+      });
+    });
+
+    it("identifies if job is associated with given degrees", () => {
+      const userStore = useUserStore();
+      userStore.selectedDegrees = ["Master's"];
+      const store = useJobsStore();
+      const job = createJob({ degree: "Master's" });
+
+      const result = store.INCLUDE_JOB_BY_DEGREE(job);
+
+      expect(result).toBe(true);
     });
   });
 });

@@ -9,3 +9,7 @@ export interface Job {
   preferedQualifications: string[];
   dateAdded: string;
 }
+export interface Degree {
+  id: number;
+  degree: string;
+}
